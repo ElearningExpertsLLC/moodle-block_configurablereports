@@ -77,11 +77,9 @@ class customsql_form extends moodleform {
     }
 
     function validation($data, $files) {
-        if (get_config('block_configurable_reports', 'sqlsecurity')) {
+//        if (get_config('block_configurable_reports', 'sqlsecurity')) {
             return $this->validation_high_security($data, $files);
-        } else {
-            return $this->validation_low_security($data, $files);
-        }
+//        } 
     }
 
     function validation_high_security($data, $files) {

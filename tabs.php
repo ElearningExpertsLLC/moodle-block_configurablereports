@@ -25,7 +25,14 @@
 if (!defined('MOODLE_INTERNAL')) {
     die('Direct access to this script is forbidden.');    ///  It must be included from a Moodle page
 }
+global $CFG;
+require_once($CFG->dirroot."/blocks/moodleblock.class.php");
+                require_once($CFG->dirroot."/blocks/configurable_reports/block_configurable_reports.php");
 
+                $obj = new block_configurable_reports();
+                if (!$obj->get_remote_db_status()) {
+                    throw new moodle_exception(get_string('unavailable', 'block_configurable_reports'));
+                }
 $top = array();
 
 $top[] = new tabobject('viewreport', new moodle_url('/blocks/configurable_reports/viewreport.php',

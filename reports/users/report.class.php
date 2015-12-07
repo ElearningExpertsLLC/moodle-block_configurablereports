@@ -29,10 +29,10 @@ class report_users extends report_base{
 	}	
 
 	function get_all_elements(){
-		global $DB;
+		global $DB, $remotedb;
 		
 		$elements = array();
-		$rs = $DB->get_recordset('user', null, '', 'id');
+		$rs = $remotedb->get_recordset('user', null, '', 'id');
         foreach ($rs as $result) {
 			$elements[] = $result->id;
 		}
@@ -41,11 +41,11 @@ class report_users extends report_base{
 	}
 	
 	function get_rows($elements, $sqlorder = ''){
-		global $DB, $CFG;
+		global $DB, $CFG, $remotedb;
 	
 		if(!empty($elements)){
-			list($usql, $params) = $DB->get_in_or_equal($elements);	
-			return $DB->get_records_select('user',"id $usql", $params, $sqlorder);
+			list($usql, $params) = $remotedb->get_in_or_equal($elements);	
+			return $remotedb->get_records_select('user',"id $usql", $params, $sqlorder);
 		}	
 		else{
 			return array();

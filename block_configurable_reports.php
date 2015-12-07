@@ -50,6 +50,16 @@ class block_configurable_reports extends block_list {
      * @return boolean
      **/
     public function applicable_formats() {
+        global $CFG;
+        
+        require_once ($CFG->libdir.'/classes/plugin_manager.php');
+        $pluginmanager = core_plugin_manager::instance();
+        $plugininfo = $pluginmanager->get_plugin_info('block_configurable_reports');
+        $status = $plugininfo->is_installed_and_upgraded();
+        
+        if (!$this->get_remote_db_status() && $status) {
+            return array();
+        }
         return array('site' => true, 'course' => true, 'my' => true);
     }
 
@@ -79,6 +89,12 @@ class block_configurable_reports extends block_list {
     public function get_content() {
         global $DB, $USER, $CFG, $COURSE;
 
+        if (!$this->get_remote_db_status()) {
+            $this->content->items[] = get_string('unavailable','block_configurable_reports');
+            $this->content->icons = array();
+            return $this->content;
+        }  
+        
         if ($this->content !== null) {
             return $this->content;
         }
@@ -205,6 +221,18 @@ class block_configurable_reports extends block_list {
             }
         }
         return true; // Finished OK.
+    }
+    
+    public function get_remote_db_status () {       
+        $dbhost = get_config('block_configurable_reports', 'dbhost');
+        $dbname = get_config('block_configurable_reports', 'dbname');
+        $dbuser = get_config('block_configurable_reports', 'dbuser');
+        
+        if (!empty($dbhost) && !empty($dbname) && !empty($dbuser)) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
 }

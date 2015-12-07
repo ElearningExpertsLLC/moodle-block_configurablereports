@@ -77,9 +77,8 @@ class report_edit_form extends moodleform {
         $mform->setDefault('cron',0);
         $mform->disabledIf('cron', 'type', 'neq', 'sql');
 
-        $mform->addElement('checkbox','remote',get_string('remote','block_configurable_reports'),get_string('remotedescription','block_configurable_reports'));
-        $mform->addHelpButton('remote','remote', 'block_configurable_reports');
-        $mform->setDefault('remote',0);
+        $mform->addElement('hidden','remote', 1);
+        $mform->setType('remote', PARAM_INT);
 
         $mform->addElement('header', 'exportoptions', get_string('exportoptions', 'block_configurable_reports'));
         $options = cr_get_export_plugins();

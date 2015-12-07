@@ -25,6 +25,14 @@
     require_once("../../config.php");
 
 	require_once($CFG->dirroot."/blocks/configurable_reports/locallib.php");
+        require_once($CFG->dirroot."/blocks/moodleblock.class.php");
+        require_once($CFG->dirroot."/blocks/configurable_reports/block_configurable_reports.php");
+
+        $obj = new block_configurable_reports();
+        if (!$obj->get_remote_db_status()) {
+            throw new moodle_exception(get_string('unavailable', 'block_configurable_reports'));
+        }
+
 
 
 	$id = optional_param('id', 0,PARAM_INT);

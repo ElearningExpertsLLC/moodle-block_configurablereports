@@ -29,10 +29,10 @@ class report_categories extends report_base{
 	}	
 
 	function get_all_elements(){
-		global $DB;
-		
+		global $DB, $remotedb;
+                
 		$elements = array();
-		$rs = $DB->get_recordset('course_categories', null, '', 'id');
+		$rs = $remotedb->get_recordset('course_categories', null, '', 'id');
         foreach ($rs as $result) {
 			$elements[] = $result->id;
 		}
@@ -41,13 +41,13 @@ class report_categories extends report_base{
 	}
 	
 	function get_rows($elements, $sqlorder = ''){
-		global $DB, $CFG;
+		global $DB, $CFG, $remotedb;
 		
 		$finalelements = array();
 		
 		if(!empty($elements)){
-			list($usql, $params) = $DB->get_in_or_equal($elements);			
-			return $DB->get_records_select('course_categories',"id $usql", $params, $sqlorder);
+			list($usql, $params) = $remotedb->get_in_or_equal($elements);			
+			return $remotedb->get_records_select('course_categories',"id $usql", $params, $sqlorder);
 		}	
 		
 		return $finalelements;

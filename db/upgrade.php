@@ -74,6 +74,16 @@ function xmldb_block_configurable_reports_upgrade($oldversion) {
         }
         upgrade_plugin_savepoint(true, 2011040115, 'block', 'configurable_reports');
     }
+    
+    if ($oldversion < 2011040120) {
+	$select = "plugin = 'block_configurable_reports' AND name <> 'version'";
+	$DB->delete_records_select('config_plugins', $select);
+        $sql = "UPDATE {block_configurable_reports}
+                   SET remote='1'
+                 WHERE 1=1 ";
+        $DB->execute($sql);
+	upgrade_plugin_savepoint(true, 2011040120, 'block', 'configurable_reports');
+    }
 
     return true;
 }
